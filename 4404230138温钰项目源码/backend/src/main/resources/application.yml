@@ -1,0 +1,87 @@
+spring:
+  application:
+    name: hardware-compatibility-checker
+    
+  profiles:
+    active: dev
+    
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: password
+    
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    
+  # 缓存配置
+  cache:
+    type: simple
+    cache-null-values: false
+      
+  # 安全配置
+  # security:
+  #   oauth2:
+  #     resourceserver:
+  #       jwt:
+  #         issuer-uri: http://localhost:8080
+          
+  # 服务器配置
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+      
+server:
+  port: 8080
+  servlet:
+    context-path: /
+  
+  # 静态资源配置
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/public/,file:./
+      cache:
+        period: 0
+
+# Swagger配置
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
+# JWT配置
+app:
+  jwt:
+    secret: your-secret-key-here # 用于JWT签名的密钥，请在生产环境中修改为安全密钥
+    expiration: 86400000 # 访问令牌过期时间（毫秒），默认24小时
+    refresh-expiration: 604800000 # 刷新令牌过期时间（毫秒），默认7天
+
+# 日志配置
+logging:
+  level:
+    root: info
+    com.hardware.compatibility: debug
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId}] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId}] %logger{36} - %msg%n"
+
+# Spring Boot Actuator 配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,loggers,env
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true

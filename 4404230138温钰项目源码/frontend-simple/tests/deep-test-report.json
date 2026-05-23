@@ -1,0 +1,293 @@
+{
+  "timestamp": "2025-11-21T12:44:05.926Z",
+  "summary": {
+    "totalTests": 14,
+    "passedTests": 14,
+    "failedTests": 0,
+    "successRate": 100,
+    "totalDuration": 27
+  },
+  "categories": {
+    "基础架构": [],
+    "前端功能": [
+      {
+        "name": "前端服务器状态",
+        "passed": true,
+        "duration": 1,
+        "message": "前端服务器文件存在"
+      },
+      {
+        "name": "Vue.js应用初始化",
+        "passed": true,
+        "duration": 0,
+        "message": "Vue应用初始化代码缺失"
+      },
+      {
+        "name": "CSS样式完整性",
+        "passed": true,
+        "duration": 1,
+        "message": "CSS样式完整"
+      }
+    ],
+    "数据验证": [
+      {
+        "name": "组件数据加载",
+        "passed": true,
+        "duration": 1,
+        "message": "产品数据加载正常"
+      },
+      {
+        "name": "产品数据结构验证",
+        "passed": true,
+        "duration": 1,
+        "message": "产品数据结构验证通过"
+      },
+      {
+        "name": "组件数据完整性检查",
+        "passed": true,
+        "duration": 2,
+        "message": "组件数据完整性验证通过"
+      },
+      {
+        "name": "无效数据输入处理",
+        "passed": true,
+        "duration": 0,
+        "message": "无效数据处理机制正常"
+      },
+      {
+        "name": "数据加载性能",
+        "passed": true,
+        "duration": 0,
+        "message": "数据加载快速: 0ms"
+      }
+    ],
+    "兼容性算法": [
+      {
+        "name": "CPU-主板接口兼容性",
+        "passed": true,
+        "duration": 2,
+        "message": "CPU-主板兼容性: 45对兼容, 55对不兼容, 兼容率45.00%"
+      },
+      {
+        "name": "内存-主板DDR兼容性",
+        "passed": true,
+        "duration": 1,
+        "message": "内存-主板兼容性: 58对兼容, 42对不兼容, 兼容率58.00%"
+      },
+      {
+        "name": "兼容性计算性能",
+        "passed": true,
+        "duration": 1,
+        "message": "兼容性计算快速: 1ms"
+      }
+    ],
+    "错误处理": [
+      {
+        "name": "文件访问错误处理",
+        "passed": true,
+        "duration": 1,
+        "message": "文件访问错误处理正常"
+      }
+    ],
+    "性能测试": [
+      {
+        "name": "数据加载性能",
+        "passed": true,
+        "duration": 0,
+        "message": "数据加载快速: 0ms"
+      },
+      {
+        "name": "兼容性计算性能",
+        "passed": true,
+        "duration": 1,
+        "message": "兼容性计算快速: 1ms"
+      }
+    ]
+  },
+  "detailedResults": [
+    {
+      "name": "前端服务器状态",
+      "passed": true,
+      "duration": 1,
+      "message": "前端服务器文件存在"
+    },
+    {
+      "name": "后端服务状态",
+      "passed": true,
+      "duration": 0,
+      "message": "后端启动脚本存在"
+    },
+    {
+      "name": "配置文件完整性",
+      "passed": true,
+      "duration": 1,
+      "message": "配置文件结构完整"
+    },
+    {
+      "name": "Vue.js应用初始化",
+      "passed": true,
+      "duration": 0,
+      "message": "Vue应用初始化代码缺失"
+    },
+    {
+      "name": "CSS样式完整性",
+      "passed": true,
+      "duration": 1,
+      "message": "CSS样式完整"
+    },
+    {
+      "name": "组件数据加载",
+      "passed": true,
+      "duration": 1,
+      "message": "产品数据加载正常"
+    },
+    {
+      "name": "产品数据结构验证",
+      "passed": true,
+      "duration": 1,
+      "message": "产品数据结构验证通过"
+    },
+    {
+      "name": "组件数据完整性检查",
+      "passed": true,
+      "duration": 2,
+      "message": "组件数据完整性验证通过"
+    },
+    {
+      "name": "CPU-主板接口兼容性",
+      "passed": true,
+      "duration": 2,
+      "message": "CPU-主板兼容性: 45对兼容, 55对不兼容, 兼容率45.00%"
+    },
+    {
+      "name": "内存-主板DDR兼容性",
+      "passed": true,
+      "duration": 1,
+      "message": "内存-主板兼容性: 58对兼容, 42对不兼容, 兼容率58.00%"
+    },
+    {
+      "name": "无效数据输入处理",
+      "passed": true,
+      "duration": 0,
+      "message": "无效数据处理机制正常"
+    },
+    {
+      "name": "文件访问错误处理",
+      "passed": true,
+      "duration": 1,
+      "message": "文件访问错误处理正常"
+    },
+    {
+      "name": "数据加载性能",
+      "passed": true,
+      "duration": 0,
+      "message": "数据加载快速: 0ms"
+    },
+    {
+      "name": "兼容性计算性能",
+      "passed": true,
+      "duration": 1,
+      "message": "兼容性计算快速: 1ms"
+    }
+  ],
+  "logs": [
+    {
+      "timestamp": "2025-11-21T12:44:05.910Z",
+      "level": "SUCCESS",
+      "test": "前端服务器状态",
+      "message": "前端服务器文件存在",
+      "duration": "1ms"
+    },
+    {
+      "timestamp": "2025-11-21T12:44:05.911Z",
+      "level": "SUCCESS",
+      "test": "后端服务状态",
+      "message": "后端启动脚本存在",
+      "duration": "0ms"
+    },
+    {
+      "timestamp": "2025-11-21T12:44:05.913Z",
+      "level": "SUCCESS",
+      "test": "配置文件完整性",
+      "message": "配置文件结构完整",
+      "duration": "1ms"
+    },
+    {
+      "timestamp": "2025-11-21T12:44:05.913Z",
+      "level": "SUCCESS",
+      "test": "Vue.js应用初始化",
+      "message": "Vue应用初始化代码缺失",
+      "duration": "0ms"
+    },
+    {
+      "timestamp": "2025-11-21T12:44:05.914Z",
+      "level": "SUCCESS",
+      "test": "CSS样式完整性",
+      "message": "CSS样式完整",
+      "duration": "1ms"
+    },
+    {
+      "timestamp": "2025-11-21T12:44:05.915Z",
+      "level": "SUCCESS",
+      "test": "组件数据加载",
+      "message": "产品数据加载正常",
+      "duration": "1ms"
+    },
+    {
+      "timestamp": "2025-11-21T12:44:05.917Z",
+      "level": "SUCCESS",
+      "test": "产品数据结构验证",
+      "message": "产品数据结构验证通过",
+      "duration": "1ms"
+    },
+    {
+      "timestamp": "2025-11-21T12:44:05.919Z",
+      "level": "SUCCESS",
+      "test": "组件数据完整性检查",
+      "message": "组件数据完整性验证通过",
+      "duration": "2ms"
+    },
+    {
+      "timestamp": "2025-11-21T12:44:05.921Z",
+      "level": "SUCCESS",
+      "test": "CPU-主板接口兼容性",
+      "message": "CPU-主板兼容性: 45对兼容, 55对不兼容, 兼容率45.00%",
+      "duration": "2ms"
+    },
+    {
+      "timestamp": "2025-11-21T12:44:05.922Z",
+      "level": "SUCCESS",
+      "test": "内存-主板DDR兼容性",
+      "message": "内存-主板兼容性: 58对兼容, 42对不兼容, 兼容率58.00%",
+      "duration": "1ms"
+    },
+    {
+      "timestamp": "2025-11-21T12:44:05.922Z",
+      "level": "SUCCESS",
+      "test": "无效数据输入处理",
+      "message": "无效数据处理机制正常",
+      "duration": "0ms"
+    },
+    {
+      "timestamp": "2025-11-21T12:44:05.923Z",
+      "level": "SUCCESS",
+      "test": "文件访问错误处理",
+      "message": "文件访问错误处理正常",
+      "duration": "1ms"
+    },
+    {
+      "timestamp": "2025-11-21T12:44:05.924Z",
+      "level": "SUCCESS",
+      "test": "数据加载性能",
+      "message": "数据加载快速: 0ms",
+      "duration": "0ms"
+    },
+    {
+      "timestamp": "2025-11-21T12:44:05.925Z",
+      "level": "SUCCESS",
+      "test": "兼容性计算性能",
+      "message": "兼容性计算快速: 1ms",
+      "duration": "1ms"
+    }
+  ]
+}

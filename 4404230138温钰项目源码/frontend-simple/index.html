@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>硬件兼容性检测平台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="专业的硬件兼容性检测工具，帮助您快速分析计算机硬件组件的兼容性" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>" />
+  
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  
+  <!-- 登录检查脚本 -->
+  <script>
+    // 检查用户是否已登录
+    function checkLogin() {
+      const currentUser = localStorage.getItem('current_user');
+      if (!currentUser) {
+        // 如果没有登录，跳转到登录页面
+        window.location.href = 'login.html';
+        return false;
+      }
+      return true;
+    }
+    
+    // 页面加载时检查登录状态
+    window.addEventListener('DOMContentLoaded', function() {
+      checkLogin();
+    });
+  </script>
+  
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --card: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --err: #ef4444;
+      --accent: #3b82f6;
+      --border: #374151;
+      --transition: all 0.3s ease;
+    }
+    
+    .input {
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 8px 10px;
+      font-size: 13px;
+      min-width: 160px;
+      transition: var(--transition);
+    }
+    
+    .input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    .input::placeholder { color: var(--muted); }
+    
+    * { 
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: linear-gradient(160deg, #0b1021, #0e162f 50%, #0b1021);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    
+    header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(17, 24, 39, 0.6);
+      backdrop-filter: blur(6px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    header h1 { 
+      margin: 0; 
+      font-size: 20px; 
+      letter-spacing: 0.5px; 
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 700;
+    }
+    
+    header p { 
+      margin: 6px 0 0; 
+      color: var(--muted); 
+      font-size: 12px; 
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 16px;
+      min-height: calc(100vh - 120px);
+    }
+    
+    .panel {
+      background: rgba(17, 24, 39, 0.5);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      backdrop-filter: blur(4px);
+      transition: var(--transition);
+    }
+    
+    .panel:hover {
+      background: rgba(17, 24, 39, 0.7);
+    }
+    
+    .section-title {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      letter-spacing: 0.3px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    
+    .card .status {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      min-height: 18px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 8px 10px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+    
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn:disabled {
+      background: var(--border);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .btn.secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    
+    .btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--accent);
+    }
+    
+    .stack { 
+      display: flex; 
+      gap: 8px; 
+      flex-wrap: wrap; 
+    }
+    
+    .list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      max-height: 280px;
+      overflow: auto;
+      padding-right: 6px;
+    }
+    
+    .item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+      background: #111827;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      transition: var(--transition);
+    }
+    
+    .item:hover {
+      background: #1a253c;
+    }
+    
+    .item h4 { 
+      margin: 0; 
+      font-size: 14px; 
+      font-weight: 600;
+    }
+    
+    .item .meta { 
+      font-size: 12px; 
+      color: var(--muted); 
+      margin-top: 6px; 
+    }
+    
+    .pill {
+      display: inline-block;
+      font-size: 11px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 2px 8px;
+      margin-right: 6px;
+    }
+    
+    .inspect {
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      background: rgba(31, 41, 55, 0.6);
+    }
+    
+    .result {
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      transition: var(--transition);
+    }
+    
+    .result.ok { 
+      background: rgba(34, 197, 94, 0.15); 
+      border: 1px solid rgba(34,197,94,0.4); 
+    }
+    
+    .result.warn { 
+      background: rgba(245, 158, 11, 0.15); 
+      border: 1px solid rgba(245, 158, 11, 0.4); 
+    }
+    
+    .result.err { 
+      background: rgba(239, 68, 68, 0.15); 
+      border: 1px solid rgba(239, 68, 68, 0.4); 
+    }
+    
+    .result h5 { 
+      margin: 0 0 6px; 
+      font-size: 13px; 
+      font-weight: 600;
+    }
+    
+    .result p { 
+      margin: 0; 
+      font-size: 12px; 
+      color: var(--muted); 
+    }
+    
+    .kv {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 8px;
+      margin: 6px 0;
+      font-size: 12px;
+    }
+    
+    .kv .k { 
+      color: var(--muted); 
+      font-weight: 500;
+    }
+    
+    .footer {
+      max-width: 1200px;
+      margin: 6px auto 20px;
+      padding: 0 16px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0; 
+      left: 0;
+      width: 100vw; 
+      height: 100vh;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn 0.2s ease;
+    }
+    
+    .modal {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      width: 90%;
+      max-width: 900px;
+      max-height: 80vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+    }
+    
+    .modal h3 {
+      margin-top: 0;
+      font-size: 16px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    
+    .modal-flex {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .modal-body {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 16px;
+    }
+    
+    .modal-list {
+      border-right: 1px solid var(--border);
+      padding-right: 8px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .modal-list .item {
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #111827;
+      margin-bottom: 6px;
+      display: block;
+    }
+    
+    .modal-list .item.active {
+      background: #1e40af;
+    }
+    
+    .modal-detail {
+      max-height: 400px;
+      overflow-y: auto;
+      padding-left: 8px;
+    }
+    
+    .disabled {
+      opacity: 0.6;
+      border: 1px dashed var(--err) !important;
+      cursor: not-allowed;
+    }
+    
+    .incompatible {
+      color: var(--err);
+      font-size: 11px;
+      margin-top: 6px;
+      font-weight: bold;
+    }
+    
+    /* 动画 */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+      from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0); 
+      }
+    }
+    
+    /* 滚动条样式 */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 900px) {
+      .container { 
+        grid-template-columns: 1fr; 
+        gap: 12px;
+      }
+      
+      .grid { 
+        grid-template-columns: 1fr; 
+      }
+      
+      .modal-body {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-list {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+        max-height: 200px;
+      }
+      
+      header h1 { 
+        font-size: 18px; 
+      }
+      
+      .stack {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .stack .btn {
+        width: 100%;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 8px;
+        margin: 10px auto;
+      }
+      
+      .panel {
+        padding: 12px;
+      }
+      
+      header {
+        padding: 15px;
+      }
+      
+      .modal {
+        width: 95%;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h1>硬件兼容性检测平台</h1>
+        <p>选择组件 → 实时检测兼容性 → 给出问题与建议</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span id="userInfo" style="font-size: 14px; color: var(--muted);"></span>
+        <button class="btn secondary" id="logoutBtn" style="padding: 6px 12px; font-size: 12px;">退出登录</button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- 用户信息脚本 -->
+  <script>
+    // 显示用户信息
+    function displayUserInfo() {
+      const currentUser = localStorage.getItem('current_user');
+      if (currentUser) {
+        const user = JSON.parse(currentUser);
+        document.getElementById('userInfo').textContent = `欢迎，${user.username}`;
+      }
+    }
+    
+    // 退出登录功能
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      localStorage.removeItem('current_user');
+      window.location.href = 'login.html';
+    });
+    
+    // 页面加载时显示用户信息
+    window.addEventListener('DOMContentLoaded', function() {
+      displayUserInfo();
+    });
+  </script>
+
+  <div id="app" class="container">
+    <div v-if="importStatus.message" class="result" :class="importStatus.level" style="grid-column: 1 / -1; margin-bottom: 16px;">
+      <h5>{{ importStatus.title }}</h5>
+      <p>{{ importStatus.message }}</p>
+    </div>
+    <!-- 左侧：选择 -->
+    <div class="panel">
+      <div class="section-title">组件选择</div>
+      <div class="stack" style="margin-bottom:10px;">
+        <button class="btn" @click="enableSmartFilter" :class="{ 'btn': !smartFilterEnabled, 'secondary': smartFilterEnabled }">
+          {{ smartFilterEnabled ? '智能筛选已开启' : '开启智能筛选' }}
+        </button>
+        <button class="btn secondary" @click="clearAll">清空所有选择</button>
+      </div>
+      <div class="grid">
+        <div class="card" :class="{ 'disabled': smartFilterEnabled && selected.mb && !isComponentCompatible('cpu', selected.cpu, selected.mb) }"
+             @click="openPicker('cpu')">
+          <h3>CPU</h3>
+          <div class="status">{{ selected.cpu ? selected.cpu.标题 : '未选择' }}</div>
+          <button class="btn" @click="openPicker('cpu')">选择</button>
+          <div v-if="smartFilterEnabled && selected.mb && !isComponentCompatible('cpu', selected.cpu, selected.mb)" class="incompatible">
+            与当前主板不兼容
+          </div>
+        </div>
+        <div class="card" :class="{ 'disabled': smartFilterEnabled && selected.cpu && !isComponentCompatible('mb', selected.mb, selected.cpu) }"
+             @click="openPicker('mb')">
+          <h3>主板</h3>
+          <div class="status">{{ selected.mb ? selected.mb.标题 : '未选择' }}</div>
+          <button class="btn" @click="openPicker('mb')">选择</button>
+          <div v-if="smartFilterEnabled && selected.cpu && !isComponentCompatible('mb', selected.mb, selected.cpu)" class="incompatible">
+            与当前CPU不兼容
+          </div>
+        </div>
+        <div class="card" @click="openPicker('gpu')">
+          <h3>显卡</h3>
+          <div class="status">{{ selected.gpu ? selected.gpu.标题 : '未选择' }}</div>
+          <button class="btn" @click="openPicker('gpu')">选择</button>
+        </div>
+        <div class="card" :class="{ 'disabled': smartFilterEnabled && selected.mb && !isComponentCompatible('ram', selected.ram, selected.mb) }"
+             @click="openPicker('ram')">
+          <h3>内存</h3>
+          <div class="status">{{ selected.ram ? selected.ram.标题 : '未选择' }}</div>
+          <button class="btn" @click="openPicker('ram')">选择</button>
+          <div v-if="smartFilterEnabled && selected.mb && !isComponentCompatible('ram', selected.ram, selected.mb)" class="incompatible">
+            与当前主板不兼容
+          </div>
+        </div>
+        <div class="card" @click="openPicker('nvme')">
+          <h3>硬盘（NVMe）</h3>
+          <div class="status">{{ selected.nvme ? selected.nvme.标题 : '未选择' }}</div>
+          <button class="btn" @click="openPicker('nvme')">选择</button>
+        </div>
+        <div class="card" :class="{ 'disabled': smartFilterEnabled && (selected.mb || selected.gpu) && !isComponentCompatible('case', selected.case, { mb: selected.mb, gpu: selected.gpu }) }"
+             @click="openPicker('case')">
+          <h3>机箱</h3>
+          <div class="status">{{ selected.case ? selected.case.标题 : '未选择' }}</div>
+          <button class="btn" @click="openPicker('case')">选择</button>
+          <div v-if="smartFilterEnabled && (selected.mb || selected.gpu) && !isComponentCompatible('case', selected.case, { mb: selected.mb, gpu: selected.gpu })" class="incompatible">
+            与已选组件可能不兼容
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧：参数&检测 -->
+    <div class="panel">
+      <div class="section-title">已选参数</div>
+      <div class="inspect">
+        <div v-if="selected.cpu">
+          <div class="kv"><div class="k">CPU</div><div>{{ selected.cpu.标题 }}</div></div>
+          <div class="kv"><div class="k">接口</div><div>{{ selected.cpu.接口 || selected.cpu.接口类型 || '-' }}</div></div>
+          <div class="kv"><div class="k">核心/线程</div><div>{{ selected.cpu.核心 || '-' }} / {{ selected.cpu.线程 || '-' }}</div></div>
+        </div>
+        <div v-if="selected.mb" style="margin-top:8px;">
+          <div class="kv"><div class="k">主板</div><div>{{ selected.mb.标题 }}</div></div>
+          <div class="kv"><div class="k">CPU插槽</div><div>{{ selected.mb['cpu接口'] || selected.mb['CPU插槽'] || '-' }}</div></div>
+          <div class="kv"><div class="k">内存代数</div><div>{{ selected.mb['ddr代数'] || selected.mb['内存类型'] || '-' }}</div></div>
+          <div class="kv"><div class="k">板型</div><div>{{ selected.mb['板型'] || selected.mb['尺寸'] || '-' }}</div></div>
+        </div>
+        <div v-if="selected.gpu" style="margin-top:8px;">
+          <div class="kv"><div class="k">显卡</div><div>{{ selected.gpu.标题 }}</div></div>
+          <div class="kv"><div class="k">显存</div><div>{{ selected.gpu['显存'] || '-' }} {{ selected.gpu['显存类型'] || '' }}</div></div>
+          <div class="kv"><div class="k">建议电源</div><div>{{ selected.gpu['电源建议'] || '-' }}</div></div>
+        </div>
+        <div v-if="selected.ram" style="margin-top:8px;">
+          <div class="kv"><div class="k">内存</div><div>{{ selected.ram.标题 }}</div></div>
+          <div class="kv"><div class="k">DDR代数</div><div>{{ selected.ram['DDR代数'] || '-' }}</div></div>
+          <div class="kv"><div class="k">容量/频率</div><div>{{ selected.ram['容量'] || '-' }} / {{ selected.ram['频率'] || '-' }}</div></div>
+        </div>
+        <div v-if="selected.nvme" style="margin-top:8px;">
+          <div class="kv"><div class="k">NVMe</div><div>{{ selected.nvme.标题 }}</div></div>
+          <div class="kv"><div class="k">协议/读速</div><div>{{ selected.nvme['NVMe协议'] || '-' }} / {{ selected.nvme['NVMe读速'] || '-' }}</div></div>
+        </div>
+        <div v-if="selected.case" style="margin-top:8px;">
+          <div class="kv"><div class="k">机箱</div><div>{{ selected.case.标题 }}</div></div>
+          <div class="kv"><div class="k">主板支持</div><div>{{ selected.case['主板支持'] || '-' }}</div></div>
+          <div class="kv"><div class="k">显卡限长</div><div>{{ selected.case['显卡限长'] || '-' }}</div></div>
+        </div>
+        
+        <div v-if="Object.keys(selected).filter(key => selected[key]).length === 0" style="text-align: center; color: var(--muted); font-size: 14px; padding: 20px;">
+          尚未选择任何硬件组件
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top:14px;">兼容性检测结果</div>
+      <div>
+        <div v-for="(r, i) in results" :key="i" class="result" :class="r.level">
+          <h5>{{ r.title }}</h5>
+          <p>{{ r.detail }}</p>
+        </div>
+      </div>
+
+      <div class="stack" style="margin-top:10px;">
+        <button class="btn" @click="exportConfig()">导出配置(JSON)</button>
+        <button class="btn secondary" @click="importDemo()">导入示例整机</button>
+        <button class="btn secondary" @click="showImportDialog()">导入数据集</button>
+      </div>
+    </div>
+
+    <!-- 模态弹窗（双栏布局） -->
+    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+      <div class="modal modal-flex">
+        <h3>选择 {{ activePickerLabel }}</h3>
+
+        <!-- 顶部筛选区 -->
+        <div class="stack" style="margin-bottom:12px;">
+          <div class="stack" style="flex:1;">
+            <select v-model="modalFilters.category" class="input">
+              <option value="">全部类别</option>
+              <option value="cpu">CPU</option>
+              <option value="mb">主板</option>
+              <option value="gpu">显卡</option>
+              <option value="ram">内存</option>
+              <option value="nvme">硬盘</option>
+              <option value="case">机箱</option>
+            </select>
+
+            <select v-model="modalFilters.brand" class="input">
+              <option value="">全部品牌</option>
+              <option v-for="b in brandsForCategory" :key="b" :value="b">{{ b }}</option>
+            </select>
+
+            <input
+              :value="modalFilters.query"
+              @input="modalFilters.query = $event.target.value"
+              class="input"
+              type="text"
+              placeholder="搜索型号/品牌（示例：技嘉、B650、Ryzen）"
+              @keyup.enter="applySearch"
+            />
+          </div>
+
+          <div class="stack">
+            <button class="btn secondary" @click="resetModalFilters">清空筛选</button>
+          </div>
+        </div>
+
+        <div class="modal-body">
+          <!-- 左侧列表 -->
+          <div class="modal-list">
+            <div
+              class="item"
+              v-for="(p, idx) in filteredListForModal"
+              :key="idx"
+              @click="previewItem = p"
+              :class="{ active: previewItem === p }"
+            >
+              <h4>{{ p.标题 || p.title || p.name || p.specs?.name || '未知型号' }}</h4>
+              <div class="meta">
+                品牌：{{ p.品牌 || p.brand || '未知' }}
+                <span class="pill">类别：{{ p.类别 || p.category || '未知' }}</span>
+                <span class="pill">{{ shortMeta(p) }}</span>
+              </div>
+              <div style="margin-top:6px; text-align:right;">
+                <button class="btn" @click.stop="choose(p); closeModal()">选用</button>
+              </div>
+            </div>
+
+            <div v-if="filteredListForModal.length === 0" class="item">
+              <h4>无符合条件的结果</h4>
+              <div class="meta">尝试调整类别、品牌或搜索关键词</div>
+            </div>
+          </div>
+
+          <!-- 右侧详情 -->
+          <div class="modal-detail" v-if="previewItem">
+            <div class="kv" v-for="(val, key) in previewItem.specs" :key="key">
+              <div class="k">{{ {
+                'name': '名称',
+                'cores': '核心数',
+                'threads': '线程数',
+                'series': '系列',
+                'process': '工艺',
+                'hasFan': '是否带风扇',
+                'socket': 'CPU插槽',
+                'hasIGPU': '是否集成显卡',
+                'l2Cache': '二级缓存',
+                'baseFreq': '基础频率',
+                'boostFreq': '睿频',
+                'l3Cache': '三级缓存',
+                'tdp': '热设计功耗',
+                'cpuSocket': 'CPU插槽',
+                'formFactor': '版型',
+                'ddrGen': '内存类型',
+                'memSlots': '内存插槽数',
+                'm2Slots': 'M.2插槽数',
+                'pcie': 'PCIe版本',
+                'chipset': '芯片组',
+                'wifi': 'Wi-Fi版本',
+                'rgb': 'RGB支持',
+                'powerPhase': '供电相数',
+                'series': '系列',
+                'waterCooling': '水冷类型',
+                'size': '尺寸',
+                'type': '类型',
+                'mbSupport': '主板支持',
+                'color': '颜色',
+                'gpuMaxLength': '显卡限长',
+                'cpuCoolerHeight': 'CPU散热限高',
+                'frontPorts': '前面板接口',
+                'fanSlots': '风扇位',
+                'capacity': '容量',
+                'speed': '速度',
+                'interface': '接口',
+                'memoryType': '内存类型',
+                'frequency': '频率',
+                'timings': '时序',
+                'voltage': '电压',
+                'length': '长度',
+                'power': '功耗',
+                'vram': '显存',
+                'vramType': '显存类型',
+                'vramBitWidth': '显存位宽',
+                'coreClock': '核心频率',
+                'memoryClock': '显存频率',
+                'model': '型号',
+                'chip': '芯片品牌',
+                'fans': '风扇数量',
+                'powerConnector': '电源接口',
+                'powerRecommendation': '电源建议',
+                'appearance': '外观',
+                'quantity': '数量',
+                'price': '价格',
+                'rating': '评分',
+                'stock': '库存',
+                'maxMem': '最大内存'
+              }[key] || key }}</div>
+              <div>{{ val }}</div>
+            </div>
+            <div style="margin-top:10px; text-align:right;">
+              <button class="btn" @click="choose(previewItem); closeModal()">选用当前项</button>
+            </div>
+          </div>
+
+          <div v-if="!previewItem" class="modal-detail" style="display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 14px;">
+            请从左侧列表中选择一个产品查看详情
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 数据导入对话框 -->
+    <div v-if="showImportDialog" class="modal-overlay" @click.self="closeImportDialog">
+      <div class="modal">
+        <h3>导入数据集</h3>
+        <div style="margin-bottom: 12px;">
+          <textarea v-model="importData" class="input" style="width: 100%; height: 200px;" placeholder="请粘贴JSON格式的数据集..."></textarea>
+        </div>
+        <div class="stack">
+          <button class="btn" @click="importDataset()">导入</button>
+          <button class="btn secondary" @click="closeImportDialog">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>© 2024 硬件兼容性检测平台 | 专业硬件兼容性分析工具</p>
+  </div>
+
+  <!-- Vue 应用脚本 -->
+  <script src="products-data.js"></script>
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          selected: {
+            cpu: null,
+            mb: null,
+            gpu: null,
+            ram: null,
+            nvme: null,
+            case: null
+          },
+          results: [],
+          smartFilterEnabled: false,
+          showModal: false,
+          activePicker: '',
+          previewItem: null,
+          modalFilters: {
+            category: '',
+            brand: '',
+            query: ''
+          },
+          showImportDialog: false,
+          importData: '',
+          importStatus: {
+            message: '',
+            level: '',
+            title: ''
+          }
+        };
+      },
+      
+      computed: {
+        activePickerLabel() {
+          const labels = {
+            cpu: 'CPU',
+            mb: '主板',
+            gpu: '显卡',
+            ram: '内存',
+            nvme: 'NVMe硬盘',
+            case: '机箱'
+          };
+          return labels[this.activePicker] || '组件';
+        },
+        
+        brandsForCategory() {
+          const category = this.modalFilters.category || this.activePicker;
+          const products = PRODUCTS[category] || [];
+          return [...new Set(products.map(p => p.品牌))];
+        },
+        
+        filteredListForModal() {
+          const category = this.modalFilters.category || this.activePicker;
+          let products = PRODUCTS[category] || [];
+          
+          // 品牌筛选
+          if (this.modalFilters.brand) {
+            products = products.filter(p => p.品牌 === this.modalFilters.brand);
+          }
+          
+          // 关键词搜索
+          if (this.modalFilters.query) {
+            const query = this.modalFilters.query.toLowerCase();
+            products = products.filter(p => 
+              p.标题.toLowerCase().includes(query) ||
+              p.品牌.toLowerCase().includes(query)
+            );
+          }
+          
+          // 智能筛选：兼容性检查
+          if (this.smartFilterEnabled && category) {
+            console.log('🔍 智能筛选已启用，类别:', category, '已选组件:', this.selected);
+            
+            products = products.filter(p => {
+              let compatible = true;
+              
+              try {
+                switch(category) {
+                  case 'cpu':
+                    // CPU需要与已选主板兼容
+                    if (this.selected.mb) {
+                      compatible = this.isComponentCompatible('cpu', p, this.selected.mb);
+                      if (!compatible) {
+                        console.log('❌ CPU不兼容:', p.标题, '与主板:', this.selected.mb.标题);
+                      }
+                    }
+                    break;
+                  case 'mb':
+                    // 主板需要与已选CPU兼容
+                    if (this.selected.cpu) {
+                      compatible = this.isComponentCompatible('mb', p, this.selected.cpu);
+                      if (!compatible) {
+                        console.log('❌ 主板不兼容:', p.标题, '与CPU:', this.selected.cpu.标题);
+                      }
+                    }
+                    break;
+                  case 'ram':
+                    // 内存需要与已选主板兼容
+                    if (this.selected.mb) {
+                      compatible = this.isComponentCompatible('ram', p, this.selected.mb);
+                      if (!compatible) {
+                        console.log('❌ 内存不兼容:', p.标题, '与主板:', this.selected.mb.标题);
+                      }
+                    }
+                    break;
+                  case 'gpu':
+                    // GPU需要与机箱和主板兼容
+                    if (this.selected.case) {
+                      compatible = this.isComponentCompatible('gpu', p, { case: this.selected.case });
+                      if (!compatible) {
+                        console.log('❌ GPU不兼容:', p.标题, '与机箱:', this.selected.case.标题);
+                      }
+                    }
+                    if (compatible && this.selected.mb) {
+                      compatible = this.isComponentCompatible('gpu', p, { mb: this.selected.mb });
+                      if (!compatible) {
+                        console.log('❌ GPU不兼容:', p.标题, '与主板:', this.selected.mb.标题);
+                      }
+                    }
+                    break;
+                  case 'case':
+                    // 机箱需要与已选组件兼容
+                    if (this.selected.mb || this.selected.gpu) {
+                      const compatibilityCheck = { 
+                        mb: this.selected.mb, 
+                        gpu: this.selected.gpu 
+                      };
+                      compatible = this.isComponentCompatible('case', p, compatibilityCheck);
+                      if (!compatible) {
+                        console.log('❌ 机箱不兼容:', p.标题, '与已选组件');
+                      }
+                    }
+                    break;
+                  case 'nvme':
+                    // NVMe需要与已选主板兼容
+                    if (this.selected.mb) {
+                      compatible = this.isComponentCompatible('nvme', p, this.selected.mb);
+                      if (!compatible) {
+                        console.log('❌ NVMe不兼容:', p.标题, '与主板:', this.selected.mb.标题);
+                      }
+                    }
+                    break;
+                }
+              } catch (e) {
+                console.error('⚠️ 兼容性检查出错:', e, '组件:', p.标题, '类别:', category);
+                // 出错时默认通过兼容性检查，避免所有产品都被过滤掉
+                compatible = true;
+              }
+              
+              return compatible;
+            });
+            
+            console.log('✅ 智能筛选后剩余产品数量:', products.length);
+          }
+          
+          return products;
+        }
+      },
+      
+      mounted() {
+        this.checkCompatibility();
+      },
+      
+      methods: {
+        openPicker(type) {
+          this.activePicker = type;
+          this.showModal = true;
+          this.previewItem = null;
+          this.modalFilters.category = type;
+          this.modalFilters.brand = '';
+          this.modalFilters.query = '';
+        },
+        
+        closeModal() {
+          this.showModal = false;
+          this.previewItem = null;
+        },
+        
+        choose(product) {
+          this.selected[this.activePicker] = product;
+          this.checkCompatibility();
+        },
+        
+        clearAll() {
+          this.selected = {
+            cpu: null,
+            mb: null,
+            gpu: null,
+            ram: null,
+            nvme: null,
+            case: null
+          };
+          this.results = [];
+        },
+        
+        enableSmartFilter() {
+          console.log('🔘 智能筛选按钮点击，当前状态:', this.smartFilterEnabled, '切换后状态:', !this.smartFilterEnabled);
+          this.smartFilterEnabled = !this.smartFilterEnabled;
+          console.log('✅ 智能筛选状态已更新:', this.smartFilterEnabled);
+          
+          // 触发组件列表重新计算
+          if (this.showModal) {
+            console.log('📱 模态框已打开，触发组件列表重新计算');
+            // 强制触发Vue的响应式更新
+            this.$forceUpdate();
+          }
+          
+          this.checkCompatibility();
+          console.log('🔍 兼容性检查已完成，智能筛选状态:', this.smartFilterEnabled);
+        },
+        
+        isComponentCompatible(type, component, relatedComponent) {
+          if (!component || !relatedComponent) return true;
+          
+          console.log(`🔧 兼容性检查: ${type} - 组件: ${component.标题}, 相关组件:`, relatedComponent);
+          
+          switch (type) {
+            case 'cpu':
+              // CPU兼容性检查：改进的接口匹配逻辑
+              const cpuInterface = component.接口 || component.cpu接口;
+              const mbSocket1 = relatedComponent.cpu接口 || relatedComponent.接口;
+              return cpuInterface === mbSocket1;
+            case 'mb':
+              // 主板兼容性检查：改进的接口匹配逻辑
+              const mbSocket2 = component.cpu接口 || component.接口;
+              const cpuInterface2 = relatedComponent.接口 || relatedComponent.cpu接口;
+              return mbSocket2 === cpuInterface2;
+            case 'ram':
+              // 内存兼容性检查：改进的DDR代数匹配逻辑
+              const ramDDR = component.DDR代数 || component.ddr代数 || component.ddr;
+              const mbDDR = relatedComponent.ddr代数 || relatedComponent.DDR代数 || relatedComponent.ddr;
+              
+              // 容错处理：如果任一DDR信息缺失，默认兼容
+              if (!ramDDR || !mbDDR) {
+                console.log('⚠️ DDR信息缺失，默认兼容');
+                return true;
+              }
+              
+              // 标准化DDR格式（去除空格，统一大小写）
+              const normalizedRamDDR = ramDDR.toString().trim().toUpperCase();
+              const normalizedMbDDR = mbDDR.toString().trim().toUpperCase();
+              
+              return normalizedRamDDR === normalizedMbDDR;
+            case 'nvme':
+              // NVMe兼容性检查：检查M.2接口支持
+              const nvmeInterface = component.接口 || component.接口类型 || '';
+              const mbM2Support = relatedComponent.M2接口 || relatedComponent['M.2接口'] || relatedComponent.m2接口;
+              
+              // 如果主板没有M.2接口信息，默认兼容
+              if (!mbM2Support) {
+                console.log('⚠️ 主板M.2接口信息缺失，默认兼容');
+                return true;
+              }
+              
+              // 检查NVMe是否为M.2接口
+              return nvmeInterface.includes('M.2') || nvmeInterface.includes('M2');
+            case 'gpu':
+              // GPU兼容性检查：改进的兼容性逻辑
+              let gpuCompatible = true;
+              
+              // 检查机箱兼容性
+              if (relatedComponent.case) {
+                const gpuLength = component.长度;
+                const caseGpuLength = relatedComponent.case.显卡限长;
+                
+                if (gpuLength && caseGpuLength) {
+                  const gpuLengthNum = parseInt(gpuLength);
+                  const caseGpuLengthNum = parseInt(caseGpuLength);
+                  
+                  if (!isNaN(gpuLengthNum) && !isNaN(caseGpuLengthNum) && gpuLengthNum > caseGpuLengthNum) {
+                    gpuCompatible = false;
+                    console.log('❌ GPU长度超过机箱限制');
+                  }
+                }
+              }
+              
+              // 检查主板兼容性（PCIe接口）
+              if (relatedComponent.mb) {
+                const gpuInterface = component.接口 || component.接口类型 || '';
+                const mbPcieSupport = relatedComponent.mb.PCIe接口 || relatedComponent.mb['PCI-E接口'] || relatedComponent.mb.pcie接口;
+                
+                // 如果GPU接口包含PCIe或主板支持PCIe，则兼容
+                if (mbPcieSupport && gpuInterface && !gpuInterface.includes('PCIe') && !gpuInterface.includes('PCI-E')) {
+                  gpuCompatible = false;
+                  console.log('❌ GPU接口与主板不兼容');
+                }
+              }
+              
+              return gpuCompatible;
+            case 'case':
+              // 机箱兼容性检查：改进的逻辑
+              const mbSize = relatedComponent.mb?.板型 || relatedComponent.mb?.尺寸 || '';
+              const gpuLength = relatedComponent.gpu?.长度;
+              const caseMbSupport = component.主板支持 || '';
+              const caseGpuLength = component.显卡限长;
+              
+              let compatible = true;
+              
+              // 检查主板尺寸兼容性
+              if (mbSize && caseMbSupport) {
+                const normalizedMbSize = mbSize.trim().toUpperCase();
+                const normalizedCaseSupport = caseMbSupport.trim().toUpperCase();
+                
+                if (!normalizedCaseSupport.includes(normalizedMbSize)) {
+                  compatible = false;
+                  console.log('❌ 主板尺寸与机箱不兼容');
+                }
+              }
+              
+              // 检查GPU长度兼容性
+              if (gpuLength && caseGpuLength) {
+                const gpuLengthNum = parseInt(gpuLength);
+                const caseGpuLengthNum = parseInt(caseGpuLength);
+                
+                if (!isNaN(gpuLengthNum) && !isNaN(caseGpuLengthNum) && gpuLengthNum > caseGpuLengthNum) {
+                  compatible = false;
+                  console.log('❌ GPU长度超过机箱限制');
+                }
+              }
+              
+              return compatible;
+            default:
+              return true;
+          }
+        },
+        
+        checkCompatibility() {
+          this.results = [];
+          
+          // CPU与主板兼容性检查
+          if (this.selected.cpu && this.selected.mb) {
+            if (this.selected.cpu.接口 !== this.selected.mb.cpu接口) {
+              this.results.push({
+                level: 'err',
+                title: 'CPU与主板不兼容',
+                detail: `CPU接口(${this.selected.cpu.接口})与主板CPU插槽(${this.selected.mb.cpu接口})不匹配`
+              });
+            } else {
+              this.results.push({
+                level: 'ok',
+                title: 'CPU与主板兼容',
+                detail: 'CPU接口与主板插槽匹配良好'
+              });
+            }
+          }
+          
+          // 内存与主板兼容性检查
+          if (this.selected.ram && this.selected.mb) {
+            const ramDDR = this.selected.ram.DDR代数 || this.selected.ram.ddr代数 || 'undefined';
+            const mbDDR = this.selected.mb.ddr代数 || this.selected.mb.DDR代数 || 'undefined';
+            
+            if (ramDDR === 'undefined' || mbDDR === 'undefined') {
+              this.results.push({
+                level: 'warn',
+                title: '内存类型信息不完整',
+                detail: `内存类型(${ramDDR})或主板支持的内存类型(${mbDDR})信息缺失，无法进行兼容性检测`
+              });
+            } else if (ramDDR !== mbDDR) {
+              this.results.push({
+                level: 'err',
+                title: '内存与主板不兼容',
+                detail: `内存类型(${ramDDR})与主板支持的内存类型(${mbDDR})不匹配`
+              });
+            } else {
+              this.results.push({
+                level: 'ok',
+                title: '内存与主板兼容',
+                detail: '内存类型与主板支持的内存类型匹配'
+              });
+            }
+          }
+          
+          // 机箱兼容性检查
+          if (this.selected.case) {
+            let caseCompatible = true;
+            let caseDetails = [];
+            
+            if (this.selected.mb) {
+              const mbSize = this.selected.mb.板型 || this.selected.mb.尺寸;
+              const caseSupport = this.selected.case.主板支持;
+              if (mbSize && caseSupport && !caseSupport.includes(mbSize)) {
+                caseCompatible = false;
+                caseDetails.push(`主板(${mbSize})与机箱支持(${caseSupport})不兼容`);
+              }
+            }
+            
+            if (this.selected.gpu) {
+              const gpuLength = this.selected.gpu.长度;
+              const caseGpuLength = this.selected.case.显卡限长;
+              if (gpuLength && caseGpuLength && parseInt(gpuLength) > parseInt(caseGpuLength)) {
+                caseCompatible = false;
+                caseDetails.push(`显卡长度(${gpuLength}mm)超过机箱限制(${caseGpuLength}mm)`);
+              }
+            }
+            
+            if (caseCompatible) {
+              this.results.push({
+                level: 'ok',
+                title: '机箱兼容性良好',
+                detail: '所有组件与机箱兼容'
+              });
+            } else {
+              this.results.push({
+                level: 'err',
+                title: '机箱兼容性问题',
+                detail: caseDetails.join('; ')
+              });
+            }
+          }
+          
+          // 基础检查
+          const selectedCount = Object.values(this.selected).filter(Boolean).length;
+          if (selectedCount === 0) {
+            this.results.push({
+              level: 'warn',
+              title: '尚未选择组件',
+              detail: '请选择至少一个硬件组件开始兼容性检测'
+            });
+          } else if (selectedCount === 1) {
+            this.results.push({
+              level: 'warn',
+              title: '组件数量不足',
+              detail: '建议选择更多组件进行完整的兼容性检测'
+            });
+          }
+        },
+        
+        shortMeta(product) {
+          if (product.类别 === 'cpu') {
+            return `${product.核心}核/${product.线程}线程`;
+          } else if (product.类别 === 'ram') {
+            return `${product.容量}/${product.频率}`;
+          } else if (product.类别 === 'gpu') {
+            return `${product.显存}`;
+          }
+          return '';
+        },
+        
+        resetModalFilters() {
+          this.modalFilters.category = this.activePicker;
+          this.modalFilters.brand = '';
+          this.modalFilters.query = '';
+        },
+        
+        applySearch() {
+          // 搜索功能已集成在computed属性中
+        },
+        
+        exportConfig() {
+          const config = {
+            selected: this.selected,
+            timestamp: new Date().toISOString(),
+            compatibilityResults: this.results
+          };
+          
+          const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `hardware-config-${new Date().getTime()}.json`;
+          a.click();
+          URL.revokeObjectURL(url);
+        },
+        
+        importDemo() {
+          const demoConfig = {
+            cpu: PRODUCTS.cpu[0],
+            mb: PRODUCTS.mb[0],
+            ram: PRODUCTS.ram[0],
+            nvme: PRODUCTS.nvme[0],
+            gpu: PRODUCTS.gpu[0],
+            case: PRODUCTS.case[0]
+          };
+          
+          this.selected = demoConfig;
+          this.checkCompatibility();
+          
+          this.importStatus = {
+            message: '示例整机配置已导入，请查看兼容性检测结果',
+            level: 'ok',
+            title: '导入成功'
+          };
+          
+          setTimeout(() => {
+            this.importStatus.message = '';
+          }, 5000);
+        },
+        
+        showImportDialog() {
+          this.showImportDialog = true;
+          this.importData = '';
+        },
+        
+        closeImportDialog() {
+          this.showImportDialog = false;
+          this.importData = '';
+        },
+        
+        importDataset() {
+          try {
+            const data = JSON.parse(this.importData);
+            
+            // 验证数据结构
+            if (data && typeof data === 'object') {
+              // 可以在这里添加更复杂的数据验证逻辑
+              this.importStatus = {
+                message: '数据集导入成功',
+                level: 'ok',
+                title: '导入成功'
+              };
+            } else {
+              throw new Error('无效的数据格式');
+            }
+            
+            this.closeImportDialog();
+            setTimeout(() => {
+              this.importStatus.message = '';
+            }, 5000);
+            
+          } catch (error) {
+            this.importStatus = {
+              message: '导入失败：' + error.message,
+              level: 'err',
+              title: '导入失败'
+            };
+          }
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

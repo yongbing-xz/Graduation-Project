@@ -1,0 +1,136 @@
+{
+  "timestamp": "2025-11-21T12:33:25.787Z",
+  "totalTests": 21,
+  "passedTests": 17,
+  "failedTests": 4,
+  "successRate": 80.95,
+  "totalDuration": 144,
+  "results": [
+    {
+      "name": "超长路径测试",
+      "passed": true,
+      "duration": 1,
+      "message": "路径拒绝访问: ENOENT: no such file or directory, access 'C:\\index.html'"
+    },
+    {
+      "name": "特殊字符路径测试",
+      "passed": true,
+      "duration": 0,
+      "message": "路径拒绝访问: ENOENT: no such file or directory, access 'C:\\Users\\admin\\Desktop\\copliot (2)\\frontend-simple\\index.html?query=test&param=value'"
+    },
+    {
+      "name": "中文路径测试",
+      "passed": true,
+      "duration": 0,
+      "message": "路径拒绝访问: ENOENT: no such file or directory, access 'C:\\Users\\admin\\Desktop\\copliot (2)\\frontend-simple\\中文测试文件.html'"
+    },
+    {
+      "name": "空路径测试",
+      "passed": false,
+      "duration": 0,
+      "message": "路径可访问 (预期失败但成功)"
+    },
+    {
+      "name": "路径遍历测试",
+      "passed": true,
+      "duration": 0,
+      "message": "路径拒绝访问: ENOENT: no such file or directory, access 'C:\\etc\\passwd'"
+    },
+    {
+      "name": "Windows保留名称测试",
+      "passed": true,
+      "duration": 0,
+      "message": "路径拒绝访问: ENOENT: no such file or directory, access 'C:\\Users\\admin\\Desktop\\copliot (2)\\frontend-simple\\CON'"
+    },
+    {
+      "name": "Unicode路径测试",
+      "passed": true,
+      "duration": 0,
+      "message": "路径拒绝访问: ENOENT: no such file or directory, access 'C:\\Users\\admin\\Desktop\\copliot (2)\\frontend-simple\\测试文件🎉.html'"
+    },
+    {
+      "name": "超大JSON文件测试",
+      "passed": true,
+      "duration": 37,
+      "message": "超大JSON处理成功 (10128891 字符)"
+    },
+    {
+      "name": "损坏的JSON格式测试",
+      "passed": true,
+      "duration": 0,
+      "message": "损坏JSON解析失败: Unexpected end of JSON input"
+    },
+    {
+      "name": "特殊字符数据测试",
+      "passed": true,
+      "duration": 0,
+      "message": "特殊字符处理成功"
+    },
+    {
+      "name": "空数据测试",
+      "passed": false,
+      "duration": 0,
+      "message": "空数据处理失败: \"undefined\" is not valid JSON"
+    },
+    {
+      "name": "数据类型混淆测试",
+      "passed": true,
+      "duration": 0,
+      "message": "类型混淆处理成功"
+    },
+    {
+      "name": "多文件同时读取测试",
+      "passed": true,
+      "duration": 1,
+      "message": "并发读取 3 个文件成功"
+    },
+    {
+      "name": "文件读写竞争测试",
+      "passed": true,
+      "duration": 2,
+      "message": "文件读写竞争条件处理成功"
+    },
+    {
+      "name": "Promise并发限制测试",
+      "passed": true,
+      "duration": 0,
+      "message": "处理 1000 个并发Promise成功"
+    },
+    {
+      "name": "内存泄漏检测测试",
+      "passed": true,
+      "duration": 1,
+      "message": "内存使用: 初始 27.98MB, 最终 31.06MB, 差异 3.09MB"
+    },
+    {
+      "name": "CPU密集型操作测试",
+      "passed": true,
+      "duration": 16,
+      "message": "CPU密集型计算完成，结果: -681.7596643536841"
+    },
+    {
+      "name": "垃圾回收压力测试",
+      "passed": true,
+      "duration": 13,
+      "message": "垃圾回收压力测试完成，系统稳定"
+    },
+    {
+      "name": "文件权限测试",
+      "passed": true,
+      "duration": 2,
+      "message": "文件权限测试完成"
+    },
+    {
+      "name": "磁盘空间模拟测试",
+      "passed": false,
+      "duration": 2,
+      "message": "目录大小: 0.00MB"
+    },
+    {
+      "name": "超时处理测试",
+      "passed": false,
+      "duration": 59,
+      "message": "超时处理测试失败: operation timeout"
+    }
+  ]
+}

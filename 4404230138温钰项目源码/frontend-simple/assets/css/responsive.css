@@ -1,0 +1,212 @@
+/* 响应式设计样式 */
+
+/* 移动设备适配 */
+@media (max-width: 768px) {
+  /* 头部适配 */
+  header h1 {
+    font-size: 18px;
+    text-align: center;
+  }
+  
+  header p {
+    font-size: 11px;
+    text-align: center;
+  }
+  
+  /* 容器布局适配 */
+  .container {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 0 12px;
+  }
+  
+  /* 面板适配 */
+  .panel {
+    padding: 12px;
+  }
+  
+  /* 网格布局适配 */
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  /* 卡片适配 */
+  .card {
+    padding: 10px;
+  }
+  
+  .card h3 {
+    font-size: 14px;
+  }
+  
+  /* 按钮适配 */
+  .btn {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+  
+  /* 模态框适配 */
+  .modal {
+    width: 95%;
+    padding: 15px;
+    margin: 10px;
+  }
+  
+  .modal-body {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .modal-list {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+  
+  /* 登录页面适配 */
+  .login-container {
+    padding: 20px;
+  }
+  
+  .login-card {
+    padding: 30px 20px;
+  }
+  
+  .login-logo h1 {
+    font-size: 24px;
+  }
+  
+  /* 表单适配 */
+  .form-input {
+    font-size: 16px; /* 防止iOS缩放 */
+  }
+  
+  /* 导航栏适配 */
+  .stack {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  /* 详细信息适配 */
+  .kv {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  
+  .kv .k {
+    font-weight: bold;
+    color: var(--text);
+  }
+  
+  /* 结果区域适配 */
+  .result {
+    padding: 8px;
+  }
+  
+  .result h5 {
+    font-size: 12px;
+  }
+  
+  .result p {
+    font-size: 11px;
+  }
+}
+
+/* 平板设备适配 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .modal {
+    width: 85%;
+  }
+}
+
+/* 超大屏幕适配 */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1400px;
+  }
+  
+  .panel {
+    padding: 20px;
+  }
+  
+  .card {
+    padding: 15px;
+  }
+}
+
+/* 横屏适配 */
+@media (max-height: 600px) and (orientation: landscape) {
+  .login-container {
+    padding: 10px;
+  }
+  
+  .login-card {
+    padding: 20px;
+  }
+  
+  .container {
+    margin: 10px auto;
+  }
+  
+  .list {
+    max-height: 200px;
+  }
+}
+
+/* 高DPI屏幕适配 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .btn {
+    min-height: 44px; /* iOS推荐触摸尺寸 */
+  }
+  
+  .item {
+    min-height: 60px;
+  }
+  
+  /* 增大触摸目标 */
+  .modal-list .item {
+    padding: 12px 8px;
+  }
+  
+  /* 禁用悬停效果 */
+  .btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* 打印样式 */
+@media print {
+  .btn, .modal-overlay {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .panel {
+    background: white !important;
+    border: 1px solid #ccc !important;
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "app": {
+    "name": "硬件兼容性检测平台",
+    "version": "1.0.0",
+    "description": "专业的硬件兼容性检测工具",
+    "author": "硬件检测团队",
+    "website": "#"
+  },
+  "features": {
+    "smartFilter": true,
+    "dataImport": true,
+    "exportConfig": true,
+    "userAuth": true,
+    "responsive": true,
+    "compatibilityCheck": true
+  },
+  "ui": {
+    "theme": "dark",
+    "primaryColor": "#3b82f6",
+    "secondaryColor": "#8b5cf6",
+    "fontFamily": "ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto"
+  },
+  "data": {
+    "components": {
+      "cpu": {
+        "requiredFields": ["标题", "品牌", "接口", "核心", "线程"],
+        "compatibilityFields": ["接口", "核心数量", "制程工艺"]
+      },
+      "mb": {
+        "requiredFields": ["标题", "品牌", "cpu接口", "ddr代数", "板型"],
+        "compatibilityFields": ["cpu接口", "ddr代数", "板型", "M2数量"]
+      },
+      "gpu": {
+        "requiredFields": ["标题", "品牌", "显存", "电源建议"],
+        "compatibilityFields": ["显卡长度", "电源接口", "显存类型"]
+      },
+      "ram": {
+        "requiredFields": ["标题", "品牌", "DDR代数", "容量", "频率"],
+        "compatibilityFields": ["DDR代数", "容量", "频率"]
+      },
+      "nvme": {
+        "requiredFields": ["标题", "品牌", "NVMe协议", "容量", "NVMe读速"],
+        "compatibilityFields": ["NVMe协议", "接口", "容量"]
+      },
+      "case": {
+        "requiredFields": ["标题", "品牌", "主板支持", "显卡限长"],
+        "compatibilityFields": ["主板支持", "显卡限长", "cpu散热限高"]
+      }
+    },
+    "compatibilityRules": {
+      "cpu_mb_match": {
+        "description": "CPU和主板插槽必须匹配",
+        "type": "critical",
+        "fields": ["cpu.接口", "mb.cpu接口"]
+      },
+      "ram_mb_ddr": {
+        "description": "内存和主板DDR代数必须匹配",
+        "type": "critical",
+        "fields": ["ram.DDR代数", "mb.ddr代数"]
+      },
+      "gpu_case_length": {
+        "description": "显卡长度不能超过机箱限长",
+        "type": "critical",
+        "fields": ["gpu.显卡长度", "case.显卡限长"]
+      }
+    }
+  },
+  "auth": {
+    "defaultUsers": [
+      {
+        "username": "demo",
+        "password": "123456",
+        "email": "demo@example.com",
+        "role": "user"
+      },
+      {
+        "username": "admin",
+        "password": "admin123",
+        "email": "admin@example.com",
+        "role": "admin"
+      }
+    ]
+  }
+}

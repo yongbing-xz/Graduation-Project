@@ -1,0 +1,47 @@
+{
+  "stability": {
+    "passRateThreshold": 99.5,
+    "maxResponseTime": 3000,
+    "maxErrorRate": 0.5,
+    "availabilityThreshold": 99.9
+  },
+  "environments": {
+    "development": {
+      "baseUrl": "http://localhost:8000",
+      "timeout": 10000,
+      "headless": false
+    },
+    "testing": {
+      "baseUrl": "http://test.example.com",
+      "timeout": 15000,
+      "headless": true
+    },
+    "production": {
+      "baseUrl": "https://hardware-compatibility.com",
+      "timeout": 20000,
+      "headless": true
+    }
+  },
+  "notifications": {
+    "email": {
+      "enabled": true,
+      "recipients": ["dev-team@example.com", "qa-team@example.com"],
+      "smtp": {
+        "host": "smtp.example.com",
+        "port": 587,
+        "secure": false
+      }
+    },
+    "slack": {
+      "enabled": false,
+      "webhookUrl": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+    }
+  },
+  "reporting": {
+    "generateHtmlReport": true,
+    "generateJsonReport": true,
+    "saveScreenshots": true,
+    "archiveOldReports": true,
+    "maxReportsToKeep": 30
+  }
+}

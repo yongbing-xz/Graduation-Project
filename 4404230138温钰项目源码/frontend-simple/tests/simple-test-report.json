@@ -1,0 +1,58 @@
+{
+  "timestamp": "2025-11-21T12:23:24.816Z",
+  "totalTests": 8,
+  "passedTests": 8,
+  "failedTests": 0,
+  "successRate": 100,
+  "totalDuration": 9,
+  "results": [
+    {
+      "name": "产品数据文件",
+      "passed": true,
+      "duration": 1,
+      "message": "文件存在且可访问"
+    },
+    {
+      "name": "测试配置文件",
+      "passed": true,
+      "duration": 0,
+      "message": "文件存在且可访问"
+    },
+    {
+      "name": "包管理文件",
+      "passed": true,
+      "duration": 0,
+      "message": "文件存在且可访问"
+    },
+    {
+      "name": "前端文件: index.html",
+      "passed": true,
+      "duration": 0,
+      "message": "文件存在且可访问"
+    },
+    {
+      "name": "前端文件: app.js",
+      "passed": true,
+      "duration": 0,
+      "message": "文件存在且可访问"
+    },
+    {
+      "name": "前端文件: styles.css",
+      "passed": true,
+      "duration": 0,
+      "message": "文件存在且可访问"
+    },
+    {
+      "name": "后端启动脚本",
+      "passed": true,
+      "duration": 0,
+      "message": "文件存在且可访问"
+    },
+    {
+      "name": "后端包管理文件",
+      "passed": true,
+      "duration": 1,
+      "message": "文件存在且可访问"
+    }
+  ]
+}
